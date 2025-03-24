@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'vksans';
+    src: url('./font.ttf') format('truetype');
+}

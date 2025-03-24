@@ -1,0 +1,37 @@
+services:
+  tarantool:
+    image: tarantool/tarantool:latest
+    restart: always
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./tarantool/init.lua:/opt/tarantool/init.lua
+    command: tarantool /opt/tarantool/init.lua
+
+  api:
+    build: .
+    restart: always
+    depends_on:
+      tarantool:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - "5005:5005"
+
+  prometheus:
+    build: ./internal/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - api
+      - tarantool
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+

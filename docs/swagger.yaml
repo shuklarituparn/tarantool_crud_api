@@ -1,0 +1,115 @@
+definitions:
+  handlers.KVRequest:
+    properties:
+      key:
+        type: string
+      value:
+        type: object
+    type: object
+  handlers.UpdateKVRequest:
+    properties:
+      value:
+        type: object
+    type: object
+info:
+  contact:
+    email: shukla.r@phystech.edu
+    name: API Support
+    url: https://shukla.ru
+  description: Документация по API для простого хранилища KV на базе Tarantool.
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  title: Key-Value Store API
+  version: "1.0"
+paths:
+  /api/v1/kv:
+    post:
+      consumes:
+      - application/json
+      description: Сохраняет пару ключ-значение в базе данных
+      parameters:
+      - description: Key-Value Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.KVRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
+      summary: Создает пару ключ-значение
+      tags:
+      - Key-Value Store
+  /api/v1/kv/{key}:
+    delete:
+      description: Удаляет пару ключ-значение из базы данных
+      parameters:
+      - description: Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Удаление пары ключ-значение
+      tags:
+      - Key-Value Store
+    get:
+      description: Получает значение, связанное с ключом
+      parameters:
+      - description: Key
+        in: path
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Получение пару ключ-значение
+      tags:
+      - Key-Value Store
+    put:
+      consumes:
+      - application/json
+      description: Обновляет значение, связанное с ключом
+      parameters:
+      - description: Key
+        in: path
+        name: key
+        required: true
+        type: string
+      - description: Updated value data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateKVRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: Обновление пару ключ-значение
+      tags:
+      - Key-Value Store
+swagger: "2.0"

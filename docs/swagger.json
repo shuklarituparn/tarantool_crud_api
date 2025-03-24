@@ -1,0 +1,123 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Документация по API для простого хранилища KV на базе Tarantool.",
+    "title": "Key-Value Store API",
+    "contact": {
+      "name": "API Support",
+      "url": "https://shukla.ru",
+      "email": "shukla.r@phystech.edu"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/v1/kv": {
+      "post": {
+        "description": "Сохраняет пару ключ-значение в базе данных",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["Key-Value Store"],
+        "summary": "Создает пару ключ-значение",
+        "parameters": [
+          {
+            "description": "Key-Value Data",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/handlers.KVRequest" }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "409": { "description": "Conflict" }
+        }
+      }
+    },
+    "/api/v1/kv/{key}": {
+      "get": {
+        "description": "Получает значение, связанное с ключом",
+        "produces": ["application/json"],
+        "tags": ["Key-Value Store"],
+        "summary": "Получение пару ключ-значение",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" }
+        }
+      },
+      "put": {
+        "description": "Обновляет значение, связанное с ключом",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["Key-Value Store"],
+        "summary": "Обновление пару ключ-значение",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Updated value data",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": { "$ref": "#/definitions/handlers.UpdateKVRequest" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" }
+        }
+      },
+      "delete": {
+        "description": "Удаляет пару ключ-значение из базы данных",
+        "produces": ["application/json"],
+        "tags": ["Key-Value Store"],
+        "summary": "Удаление пары ключ-значение",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "handlers.KVRequest": {
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "object" }
+      }
+    },
+    "handlers.UpdateKVRequest": {
+      "type": "object",
+      "properties": { "value": { "type": "object" } }
+    }
+  }
+}
